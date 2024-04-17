@@ -13,9 +13,15 @@ function cardDelete(event) {
 // @todo: Функция создания карточки
 function createCard(cardData, cardDelete) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true); //клонирую шаблон
-  cardElement.querySelector(".card__image").src = cardData.link; //установка значений вложенных эл-в
-  cardElement.querySelector(".card__image").alt = cardData.name; //установка значений вложенных эл-в
-  cardElement.querySelector(".card__title").textContent = cardData.name; //установка значений вложенных эл-в
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
+  cardImage.src = cardData.link; //установка значений вложенных эл-в
+  cardImage.alt = cardData.name; //установка значений вложенных эл-в
+  cardTitle.textContent = cardData.name; //установка значений вложенных эл-в
+
+  // cardElement.querySelector(".card__image").src = cardData.link; //установка значений вложенных эл-в
+  // cardElement.querySelector(".card__image").alt = cardData.name; //установка значений вложенных эл-в
+  // cardElement.querySelector(".card__title").textContent = cardData.name; //установка значений вложенных эл-в
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
 
