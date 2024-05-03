@@ -19,10 +19,6 @@ function createCard(cardData, cardDelete) {
   cardImage.alt = cardData.name; //установка значений вложенных эл-в
   cardTitle.textContent = cardData.name; //установка значений вложенных эл-в
 
-  // cardElement.querySelector(".card__image").src = cardData.link; //установка значений вложенных эл-в
-  // cardElement.querySelector(".card__image").alt = cardData.name; //установка значений вложенных эл-в
-  // cardElement.querySelector(".card__title").textContent = cardData.name; //установка значений вложенных эл-в
-
   const deleteButton = cardElement.querySelector(".card__delete-button");
 
   deleteButton.addEventListener("click", cardDelete); // function (event) { cardDelete(event); }
@@ -35,6 +31,8 @@ function placeContentForLoop() {
   for (let i = 0; i < initialCards.length; i++) {
     const cardElement = createCard(initialCards[i], cardDelete);
     placesList.append(cardElement); // возможно, стоит добавить проверку на то, что элемент уже добавлен в placeList, для избежания дубликатов
+
+    console.log(initialCards[i].name);
   }
 }
 
