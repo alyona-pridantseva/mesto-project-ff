@@ -20,11 +20,6 @@ module.exports = {
   },
   module: {
     rules: [
-      // sripts loader
-      {
-        test: /\.exec\.js$/,
-        use: ["script-loader"],
-      },
       {
         // rules — это массив правил, объект правил для бабеля
         test: /\.js$/, // регулярное выражение, которое ищет все js файлы
