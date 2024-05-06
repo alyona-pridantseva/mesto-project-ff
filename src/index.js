@@ -48,7 +48,7 @@ placeContentForLoop();
 // placeContentForEach();
 
 // SIXTH SPRINT
-// находим кнопки секции profile и кнопки при нажатии на картинку
+// находим кнопки секции profile и кнопки при нажатии на картинки
 const profileEditPopupButton = document.querySelector(".profile__edit-button");
 const profileAddPopupButton = document.querySelector(".profile__add-button");
 const placesCardImage = document.querySelectorAll(".card__image");
@@ -69,16 +69,35 @@ function closePopupEscape(event) {
   }
 }
 
-//
+// ф-ция закрытия попапа при клике на оверлей
+function closePopupOverlay(event) {
+// event.target - эл-т на который кликнули
+
+// проверка условия, что эл-т, на который кликнули,
+// это и есть родительский эл-т (попап)
+  if (event.target === event.currentTarget) {
+    closePopup(event.currentTarget);
+  }
+}
+
 function openPopup(popupElement) {
   popupElement.classList.add("popup_is-opened");
   document.addEventListener("keydown", closePopupEscape);
+
+  // родитель (event.currentTarget), которому добавили слушатель события
+  // и передали в качестве колбека ф-цию closePopupOverlay
+  popupElement.addEventListener("click", closePopupOverlay);
 }
 
-//
 function closePopup(popupElement) {
+  // удаление класса popup_is-opened для закрытия попапа
   popupElement.classList.remove("popup_is-opened");
+
+  // удаление обработчика события esc
   document.removeEventListener("keydown", closePopupEscape);
+
+  // удаление обработчика события при закрытом попап (оверлей)
+  popupElement.removeEventListener("click", closePopupOverlay);
 }
 
 //открытие попап при клике
