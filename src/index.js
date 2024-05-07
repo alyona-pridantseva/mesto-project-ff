@@ -50,15 +50,27 @@ placeContentForLoop();
 // SIXTH SPRINT
 // находим кнопки секции profile и кнопки при нажатии на картинки
 const profileEditPopupButton = document.querySelector(".profile__edit-button");
-const profileAddPopupButton = document.querySelector(".profile__add-button");
+const placeAddPopupButton = document.querySelector(".profile__add-button");
 const placesCardImage = document.querySelectorAll(".card__image");
 
 // находим все popups связанные с кнопками
-const profileAddPopup = document.querySelector(".popup_type_new-card");
 const profileEditPopup = document.querySelector(".popup_type_edit");
+const addPlacePopup = document.querySelector(".popup_type_new-card");
 const imagePopup = document.querySelector(".popup_type_image");
 
-const allPopups = [profileAddPopup, profileEditPopup, imagePopup];
+const allPopups = [addPlacePopup, profileEditPopup, imagePopup];
+
+
+const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
+const addCardFormElement = addPlacePopup.querySelector(".popup__form");
+
+
+// Находим поля формы и эл-ты класса profile__info
+const nameInput = profileEditFormElement.querySelector(".popup__input_type_name");
+const jobInput = profileEditFormElement.querySelector(".popup__input_type_description");
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+
 
 //Закрытие попапа нажатием на Esc
 function closePopupEscape(event) {
@@ -71,10 +83,10 @@ function closePopupEscape(event) {
 
 // ф-ция закрытия попапа при клике на оверлей
 function closePopupOverlay(event) {
-// event.target - эл-т на который кликнули
+  // event.target - эл-т на который кликнули
 
-// проверка условия, что эл-т, на который кликнули,
-// это и есть родительский эл-т (попап)
+  // проверка условия, что эл-т, на который кликнули,
+  // это и есть родительский эл-т (попап)
   if (event.target === event.currentTarget) {
     closePopup(event.currentTarget);
   }
@@ -104,10 +116,14 @@ function closePopup(popupElement) {
 function addPopupsEventListeners() {
   profileEditPopupButton.addEventListener("click", function () {
     openPopup(profileEditPopup);
+
+    // заполненные значения при открытии попапа
+    nameInput.value = profileTitle.textContent;
+    jobInput.value = profileDescription.textContent;
   });
 
-  profileAddPopupButton.addEventListener("click", function () {
-    openPopup(profileAddPopup);
+  placeAddPopupButton.addEventListener("click", function () {
+    openPopup(addPlacePopup);
   });
 
   placesCardImage.forEach(function (imageCard) {
@@ -130,3 +146,29 @@ function addPopupsEventListeners() {
 }
 
 addPopupsEventListeners();
+
+//обработчик формы редактирования профиля
+function handleProfileEditFormSubmit(event) {
+  // отмена стандартной отправки формы
+  event.preventDefault();
+
+  // Вставка значений
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
+
+  closePopup(profileEditPopup);
+}
+
+//обработчик формы добавить(+)
+function handleAddCardFormSubmit(event) {
+  // отмена стандартной отправки формы
+  event.preventDefault();
+
+  closePopup(imagePopup);
+}
+
+// Прикрепляем обработчик к форме:
+// он будет следить за событием “submit” - «отправка»
+profileEditFormElement.addEventListener("submit", handleProfileEditFormSubmit);
+
+addCardFormElement.addEventListener("submit", handleAddCardFormSubmit);
