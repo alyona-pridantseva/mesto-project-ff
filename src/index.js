@@ -60,17 +60,18 @@ const imagePopup = document.querySelector(".popup_type_image");
 
 const allPopups = [addPlacePopup, profileEditPopup, imagePopup];
 
-
 const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
 const addCardFormElement = addPlacePopup.querySelector(".popup__form");
 
-
-// Находим поля формы и эл-ты класса profile__info
-const nameInput = profileEditFormElement.querySelector(".popup__input_type_name");
-const jobInput = profileEditFormElement.querySelector(".popup__input_type_description");
+// Эл-ты профиля и инпуты модального окна - редактировать профиль
+const nameInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_name");
+const jobInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
+// Инпуты модального окна - (+)
+const nameInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_card-name");
+const urlInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_url");
 
 //Закрытие попапа нажатием на Esc
 function closePopupEscape(event) {
@@ -118,8 +119,8 @@ function addPopupsEventListeners() {
     openPopup(profileEditPopup);
 
     // заполненные значения при открытии попапа
-    nameInput.value = profileTitle.textContent;
-    jobInput.value = profileDescription.textContent;
+    nameInputPopupEdit.value = profileTitle.textContent;
+    jobInputPopupEdit.value = profileDescription.textContent;
   });
 
   placeAddPopupButton.addEventListener("click", function () {
@@ -153,8 +154,8 @@ function handleProfileEditFormSubmit(event) {
   event.preventDefault();
 
   // Вставка значений
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
+  profileTitle.textContent = nameInputPopupEdit.value;
+  profileDescription.textContent = jobInputPopupEdit.value;
 
   closePopup(profileEditPopup);
 }
@@ -164,7 +165,19 @@ function handleAddCardFormSubmit(event) {
   // отмена стандартной отправки формы
   event.preventDefault();
 
-  closePopup(imagePopup);
+  const newCardData = {
+    name: nameInputPopupAdd.value,
+    link: urlInputPopupAdd.value,
+  };
+
+  const cardElement = createCard(newCardData, cardDelete);
+
+  // добавление карточки в начало
+  placesList.prepend(cardElement);
+  closePopup(addPlacePopup);
+
+  // сброс всех полей
+  addCardFormElement.reset();
 }
 
 // Прикрепляем обработчик к форме:
