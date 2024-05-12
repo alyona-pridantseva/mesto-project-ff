@@ -1,6 +1,12 @@
 import "./pages/index.css";
 import { initialCards } from "./scripts/cards.js";
-import { createCard, cardDelete, cardLike, imagePopup, handleImagePopup } from "./components/card.js";
+import {
+  createCard,
+  cardDelete,
+  cardLike,
+  imagePopup,
+  handleImagePopup,
+} from "./components/card.js";
 import { openPopup, closePopup } from "./components/modal.js";
 
 // @todo: DOM узлы
@@ -20,17 +26,24 @@ const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
 const addCardFormElement = addPlacePopup.querySelector(".popup__form");
 
 // Эл-ты профиля и инпуты модального окна - редактировать профиль
-const nameInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_name");
-const jobInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_description");
+const nameInputPopupEdit = profileEditFormElement.querySelector(
+  ".popup__input_type_name"
+);
+const jobInputPopupEdit = profileEditFormElement.querySelector(
+  ".popup__input_type_description"
+);
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 // Инпуты модального окна - (+)
-const nameInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_card-name");
-const urlInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_url");
+const nameInputPopupAdd = addCardFormElement.querySelector(
+  ".popup__input_type_card-name"
+);
+const urlInputPopupAdd = addCardFormElement.querySelector(
+  ".popup__input_type_url"
+);
 
-const allPopupsAnimated = document.querySelectorAll('.popup');
-
+const allPopupsAnimated = document.querySelectorAll(".popup");
 
 // @todo: Вывести карточки на страницу
 function placeContentForLoop() {
@@ -51,7 +64,6 @@ function placeContentForLoop() {
 //     placesList.append(cardElement);
 //   });
 // }
-
 
 //Открытие попап при клике
 function addPopupsEventListeners() {
@@ -102,7 +114,12 @@ function handleAddCardFormSubmit(event) {
     link: urlInputPopupAdd.value,
   };
 
-  const cardElement = createCard(newCardData, cardDelete, cardLike, handleImagePopup);
+  const cardElement = createCard(
+    newCardData,
+    cardDelete,
+    cardLike,
+    handleImagePopup
+  );
 
   // добавление карточки в начало
   placesList.prepend(cardElement);
@@ -115,7 +132,7 @@ function handleAddCardFormSubmit(event) {
 
 // Плавное открытие и закрытие попапов
 allPopupsAnimated.forEach((modal) => {
- modal.classList.add('popup_is-animated');
+  modal.classList.add("popup_is-animated");
 });
 
 // Прикрепляем обработчик к форме:
