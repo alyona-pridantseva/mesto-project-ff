@@ -7,20 +7,71 @@ const cardTemplate = document.querySelector("#card-template").content; //выб�
 // @todo: DOM узлы
 const placesList = document.querySelector(".places__list");
 
+// находим кнопку секции profile
+const profileEditPopupButton = document.querySelector(".profile__edit-button");
+const placeAddPopupButton = document.querySelector(".profile__add-button");
+
+// находим все popups связанные с кнопками
+const profileEditPopup = document.querySelector(".popup_type_edit");
+const addPlacePopup = document.querySelector(".popup_type_new-card");
+const imagePopup = document.querySelector(".popup_type_image");
+
+const allPopups = [addPlacePopup, profileEditPopup, imagePopup];
+
+
+const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
+const addCardFormElement = addPlacePopup.querySelector(".popup__form");
+
+// Эл-ты профиля и инпуты модального окна - редактировать профиль
+const nameInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_name");
+const jobInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_description");
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+
+// Инпуты модального окна - (+)
+const nameInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_card-name");
+const urlInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_url");
+
+const allPopupsAnimated = document.querySelectorAll('.popup');
+
 // @todo: Функция удаления карточки
 function cardDelete(event) {
   const cardItem = event.target.closest(".card");
   cardItem.remove();
 }
 
+// функция лайка в карточке
+function cardLike(changeLike) {
+  // смена состояния (переключение)
+  changeLike.classList.toggle("card__like-button_is-active");
+}
+
+// открытие попапа с картинкой
+function handleImagePopup(cardImage) {
+  const bigPicturePopup = imagePopup.querySelector(".popup__image");
+  const namePlace = imagePopup.querySelector(".popup__caption");
+
+  if (bigPicturePopup) {
+    bigPicturePopup.src = cardImage.src;
+    bigPicturePopup.alt = cardImage.alt;
+    namePlace.textContent = bigPicturePopup.alt;
+  }
+}
+
 // @todo: Функция создания карточки
-function createCard(cardData, cardDelete, cardLike) {
+function createCard(cardData, cardDelete, cardLike, handleImagePopup) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true); //клонирую шаблон
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
+
   cardImage.src = cardData.link; //установка значений вложенных эл-в
   cardImage.alt = cardData.name; //установка значений вложенных эл-в
   cardTitle.textContent = cardData.name; //установка значений вложенных эл-в
+
+  cardImage.addEventListener("click", function () {
+    handleImagePopup(cardImage);
+    openPopup(imagePopup);
+  });
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
 
@@ -42,54 +93,22 @@ function createCard(cardData, cardDelete, cardLike) {
 // @todo: Вывести карточки на страницу
 function placeContentForLoop() {
   for (let i = 0; i < initialCards.length; i++) {
-    const cardElement = createCard(initialCards[i], cardDelete, cardLike);
+    const cardElement = createCard(
+      initialCards[i],
+      cardDelete,
+      cardLike,
+      handleImagePopup
+    );
     placesList.append(cardElement);
   }
 }
 
 // function placeContentForEach() {
 //   initialCards.forEach(function (cardData) {
-//     const cardElement = createCard(cardData, cardDelete, cardLike);
+//     const cardElement = createCard(cardData, cardDelete, cardLike, handleImagePopup);
 //     placesList.append(cardElement);
 //   });
 // }
-
-placeContentForLoop();
-// placeContentForEach();
-
-// SIXTH SPRINT
-// находим кнопки секции profile и кнопки при нажатии на картинки
-const profileEditPopupButton = document.querySelector(".profile__edit-button");
-const placeAddPopupButton = document.querySelector(".profile__add-button");
-const placesCardImage = document.querySelectorAll(".card__image");
-
-// находим все popups связанные с кнопками
-const profileEditPopup = document.querySelector(".popup_type_edit");
-const addPlacePopup = document.querySelector(".popup_type_new-card");
-const imagePopup = document.querySelector(".popup_type_image");
-
-const allPopups = [addPlacePopup, profileEditPopup, imagePopup];
-
-const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
-const addCardFormElement = addPlacePopup.querySelector(".popup__form");
-
-// Эл-ты профиля и инпуты модального окна - редактировать профиль
-const nameInputPopupEdit = profileEditFormElement.querySelector(
-  ".popup__input_type_name"
-);
-const jobInputPopupEdit = profileEditFormElement.querySelector(
-  ".popup__input_type_description"
-);
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-
-// Инпуты модального окна - (+)
-const nameInputPopupAdd = addCardFormElement.querySelector(
-  ".popup__input_type_card-name"
-);
-const urlInputPopupAdd = addCardFormElement.querySelector(
-  ".popup__input_type_url"
-);
 
 //Закрытие попапа нажатием на Esc
 function closePopupEscape(event) {
@@ -145,12 +164,6 @@ function addPopupsEventListeners() {
     openPopup(addPlacePopup);
   });
 
-  placesCardImage.forEach(function (imageCard) {
-    imageCard.addEventListener("click", function () {
-      openPopup(imagePopup);
-    });
-  });
-
   // закрытие попап при клике по крестику в правом верхнем углу
   allPopups.forEach(function (popup) {
     const closeButton = popup.querySelector(".popup__close");
@@ -163,8 +176,6 @@ function addPopupsEventListeners() {
     }
   });
 }
-
-addPopupsEventListeners();
 
 //обработчик формы редактирования профиля
 function handleProfileEditFormSubmit(event) {
@@ -188,7 +199,7 @@ function handleAddCardFormSubmit(event) {
     link: urlInputPopupAdd.value,
   };
 
-  const cardElement = createCard(newCardData, cardDelete, cardLike);
+  const cardElement = createCard(newCardData, cardDelete, cardLike,handleImagePopup);
 
   // добавление карточки в начало
   placesList.prepend(cardElement);
@@ -199,15 +210,18 @@ function handleAddCardFormSubmit(event) {
   addCardFormElement.reset();
 }
 
+// Плавное открытие и закрытие попапов
+allPopupsAnimated.forEach((modal) => {
+ modal.classList.add('popup_is-animated');
+});
+
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 profileEditFormElement.addEventListener("submit", handleProfileEditFormSubmit);
 
 addCardFormElement.addEventListener("submit", handleAddCardFormSubmit);
 
+placeContentForLoop();
 
-// функция лайка в карточке
-function cardLike(changeLike) {
-  // смена состояния (переключение)
-  changeLike.classList.toggle("card__like-button_is-active");
-};
+addPopupsEventListeners();
+// placeContentForEach();
