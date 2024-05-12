@@ -1,8 +1,7 @@
 import "./pages/index.css";
 import { initialCards } from "./scripts/cards.js";
-
-// @todo: Темплейт карточки
-const cardTemplate = document.querySelector("#card-template").content; //выбираю эл-т по идентификатору, получаю доступ к контенту
+import { createCard, cardDelete, cardLike, imagePopup, handleImagePopup } from "./components/card.js";
+import { openPopup, closePopup } from "./components/modal.js";
 
 // @todo: DOM узлы
 const placesList = document.querySelector(".places__list");
@@ -14,10 +13,8 @@ const placeAddPopupButton = document.querySelector(".profile__add-button");
 // находим все popups связанные с кнопками
 const profileEditPopup = document.querySelector(".popup_type_edit");
 const addPlacePopup = document.querySelector(".popup_type_new-card");
-const imagePopup = document.querySelector(".popup_type_image");
 
 const allPopups = [addPlacePopup, profileEditPopup, imagePopup];
-
 
 const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
 const addCardFormElement = addPlacePopup.querySelector(".popup__form");
@@ -34,61 +31,6 @@ const urlInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_ur
 
 const allPopupsAnimated = document.querySelectorAll('.popup');
 
-// @todo: Функция удаления карточки
-function cardDelete(event) {
-  const cardItem = event.target.closest(".card");
-  cardItem.remove();
-}
-
-// функция лайка в карточке
-function cardLike(changeLike) {
-  // смена состояния (переключение)
-  changeLike.classList.toggle("card__like-button_is-active");
-}
-
-// открытие попапа с картинкой
-function handleImagePopup(cardImage) {
-  const bigPicturePopup = imagePopup.querySelector(".popup__image");
-  const namePlace = imagePopup.querySelector(".popup__caption");
-
-  if (bigPicturePopup) {
-    bigPicturePopup.src = cardImage.src;
-    bigPicturePopup.alt = cardImage.alt;
-    namePlace.textContent = bigPicturePopup.alt;
-  }
-}
-
-// @todo: Функция создания карточки
-function createCard(cardData, cardDelete, cardLike, handleImagePopup) {
-  const cardElement = cardTemplate.querySelector(".card").cloneNode(true); //клонирую шаблон
-  const cardImage = cardElement.querySelector(".card__image");
-  const cardTitle = cardElement.querySelector(".card__title");
-
-  cardImage.src = cardData.link; //установка значений вложенных эл-в
-  cardImage.alt = cardData.name; //установка значений вложенных эл-в
-  cardTitle.textContent = cardData.name; //установка значений вложенных эл-в
-
-  cardImage.addEventListener("click", function () {
-    handleImagePopup(cardImage);
-    openPopup(imagePopup);
-  });
-
-  const deleteButton = cardElement.querySelector(".card__delete-button");
-
-  deleteButton.addEventListener("click", cardDelete); // function (event) { cardDelete(event); }
-
-  const cardLikeButton = cardElement.querySelector(".card__like-button");
-
-  cardLikeButton.addEventListener("click", function (event) {
-    const contains = event.target.classList.contains("card__like-button");
-
-    if (contains) {
-      cardLike(event.target);
-    }
-  });
-
-  return cardElement;
-}
 
 // @todo: Вывести карточки на страницу
 function placeContentForLoop() {
@@ -110,47 +52,8 @@ function placeContentForLoop() {
 //   });
 // }
 
-//Закрытие попапа нажатием на Esc
-function closePopupEscape(event) {
-  const popupOpen = document.querySelector(".popup_is-opened");
 
-  if (event.key === "Escape") {
-    closePopup(popupOpen);
-  }
-}
-
-// ф-ция закрытия попапа при клике на оверлей
-function closePopupOverlay(event) {
-  // event.target - эл-т на который кликнули
-
-  // проверка условия, что эл-т, на который кликнули,
-  // это и есть родительский эл-т (попап)
-  if (event.target === event.currentTarget) {
-    closePopup(event.currentTarget);
-  }
-}
-
-function openPopup(popupElement) {
-  popupElement.classList.add("popup_is-opened");
-  document.addEventListener("keydown", closePopupEscape);
-
-  // родитель (event.currentTarget), которому добавили слушатель события
-  // и передали в качестве колбека ф-цию closePopupOverlay
-  popupElement.addEventListener("click", closePopupOverlay);
-}
-
-function closePopup(popupElement) {
-  // удаление класса popup_is-opened для закрытия попапа
-  popupElement.classList.remove("popup_is-opened");
-
-  // удаление обработчика события esc
-  document.removeEventListener("keydown", closePopupEscape);
-
-  // удаление обработчика события при закрытом попап (оверлей)
-  popupElement.removeEventListener("click", closePopupOverlay);
-}
-
-//открытие попап при клике
+//Открытие попап при клике
 function addPopupsEventListeners() {
   profileEditPopupButton.addEventListener("click", function () {
     openPopup(profileEditPopup);
@@ -164,7 +67,7 @@ function addPopupsEventListeners() {
     openPopup(addPlacePopup);
   });
 
-  // закрытие попап при клике по крестику в правом верхнем углу
+  // Закрытие попап при клике по крестику в правом верхнем углу
   allPopups.forEach(function (popup) {
     const closeButton = popup.querySelector(".popup__close");
 
@@ -177,7 +80,7 @@ function addPopupsEventListeners() {
   });
 }
 
-//обработчик формы редактирования профиля
+//Обработчик формы редактирования профиля
 function handleProfileEditFormSubmit(event) {
   // отмена стандартной отправки формы
   event.preventDefault();
@@ -189,7 +92,7 @@ function handleProfileEditFormSubmit(event) {
   closePopup(profileEditPopup);
 }
 
-//обработчик формы добавить(+)
+//Обработчик формы добавить(+)
 function handleAddCardFormSubmit(event) {
   // отмена стандартной отправки формы
   event.preventDefault();
@@ -199,7 +102,7 @@ function handleAddCardFormSubmit(event) {
     link: urlInputPopupAdd.value,
   };
 
-  const cardElement = createCard(newCardData, cardDelete, cardLike,handleImagePopup);
+  const cardElement = createCard(newCardData, cardDelete, cardLike, handleImagePopup);
 
   // добавление карточки в начало
   placesList.prepend(cardElement);
