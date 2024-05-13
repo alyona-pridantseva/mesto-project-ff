@@ -1,16 +1,12 @@
 import "./pages/index.css";
-import { initialCards } from "./scripts/cards.js";
-import {
-  createCard,
-  cardDelete,
-  cardLike,
-  imagePopup,
-  handleImagePopup,
-} from "./components/card.js";
+import { initialCards } from "./components/cards.js";
+import { createCard, cardDelete, cardLike } from "./components/card.js";
 import { openPopup, closePopup } from "./components/modal.js";
 
 // @todo: DOM узлы
 const placesList = document.querySelector(".places__list");
+
+const imagePopup = document.querySelector(".popup_type_image");
 
 // находим кнопку секции profile
 const profileEditPopupButton = document.querySelector(".profile__edit-button");
@@ -44,6 +40,20 @@ const urlInputPopupAdd = addCardFormElement.querySelector(
 );
 
 const allPopupsAnimated = document.querySelectorAll(".popup");
+
+const bigPicturePopup = imagePopup.querySelector(".popup__image");
+const namePlace = imagePopup.querySelector(".popup__caption");
+
+// Открытие попапа с картинкой(увеличенной)
+function handleImagePopup(cardImage) {
+  if (bigPicturePopup) {
+    bigPicturePopup.src = cardImage.src;
+    bigPicturePopup.alt = cardImage.alt;
+    namePlace.textContent = bigPicturePopup.alt;
+  }
+
+  openPopup(imagePopup);
+}
 
 // @todo: Вывести карточки на страницу
 function placeContentForLoop() {
@@ -129,6 +139,7 @@ function handleAddCardFormSubmit(event) {
   // сброс всех полей
   addCardFormElement.reset();
 }
+
 
 // Плавное открытие и закрытие попапов
 allPopupsAnimated.forEach((modal) => {
