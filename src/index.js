@@ -22,22 +22,14 @@ const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
 const addCardFormElement = addPlacePopup.querySelector(".popup__form");
 
 // Эл-ты профиля и инпуты модального окна - редактировать профиль
-const nameInputPopupEdit = profileEditFormElement.querySelector(
-  ".popup__input_type_name"
-);
-const jobInputPopupEdit = profileEditFormElement.querySelector(
-  ".popup__input_type_description"
-);
+const nameInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_name");
+const jobInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 // Инпуты модального окна - (+)
-const nameInputPopupAdd = addCardFormElement.querySelector(
-  ".popup__input_type_card-name"
-);
-const urlInputPopupAdd = addCardFormElement.querySelector(
-  ".popup__input_type_url"
-);
+const nameInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_card-name");
+const urlInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_url");
 
 const allPopupsAnimated = document.querySelectorAll(".popup");
 
@@ -156,3 +148,4 @@ placeContentForLoop();
 
 addPopupsEventListeners();
 // placeContentForEach();
+
