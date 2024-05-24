@@ -44,6 +44,7 @@
           <h3 class="popup__title">Редактировать профиль</h3>
           <form class="popup__form" name="edit-profile" novalidate>
             <input
+              id="edit-profile__name-input"
               type="text"
               name="name"
               class="popup__input popup__input_type_name"
@@ -54,7 +55,9 @@
               data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
               required
             />
+            <span class="edit-profile__name-input-error popup__error-message-help"></span>
             <input
+              id="edit-profile__description-input"
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
@@ -65,6 +68,7 @@
               data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
               required
             />
+            <span class="edit-profile__description-input-error popup__error-message-help"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -77,6 +81,7 @@
           <h3 class="popup__title">Новое место</h3>
           <form class="popup__form" name="new-place">
             <input
+              id="place__input-name"
               type="text"
               name="place-name"
               class="popup__input popup__input_type_card-name"
@@ -87,13 +92,16 @@
               pattern="^[A-Za-zА-ЯЁа-яё\s\-,]+$"
               data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
+            <span class="place__input-name-error popup__error-message-help"></span>
             <input
+              id="place__input-link"
               type="url"
               name="link"
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="place__input-link-error popup__error-message-help"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>

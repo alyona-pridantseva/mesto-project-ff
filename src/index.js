@@ -2,10 +2,19 @@ import "./pages/index.css";
 import { initialCards } from "./components/cards.js";
 import { createCard, cardDelete, cardLike } from "./components/card.js";
 import { openPopup, closePopup } from "./components/modal.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
 
 // @todo: DOM узлы
 const placesList = document.querySelector(".places__list");
-
 const imagePopup = document.querySelector(".popup_type_image");
 
 // находим кнопку секции profile
@@ -22,14 +31,22 @@ const profileEditFormElement = profileEditPopup.querySelector(".popup__form");
 const addCardFormElement = addPlacePopup.querySelector(".popup__form");
 
 // Эл-ты профиля и инпуты модального окна - редактировать профиль
-const nameInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_name");
-const jobInputPopupEdit = profileEditFormElement.querySelector(".popup__input_type_description");
+const nameInputPopupEdit = profileEditFormElement.querySelector(
+  ".popup__input_type_name"
+);
+const jobInputPopupEdit = profileEditFormElement.querySelector(
+  ".popup__input_type_description"
+);
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 // Инпуты модального окна - (+)
-const nameInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_card-name");
-const urlInputPopupAdd = addCardFormElement.querySelector(".popup__input_type_url");
+const nameInputPopupAdd = addCardFormElement.querySelector(
+  ".popup__input_type_card-name"
+);
+const urlInputPopupAdd = addCardFormElement.querySelector(
+  ".popup__input_type_url"
+);
 
 const allPopupsAnimated = document.querySelectorAll(".popup");
 
@@ -132,7 +149,6 @@ function handleAddCardFormSubmit(event) {
   addCardFormElement.reset();
 }
 
-
 // Плавное открытие и закрытие попапов
 allPopupsAnimated.forEach((modal) => {
   modal.classList.add("popup_is-animated");
@@ -149,3 +165,4 @@ placeContentForLoop();
 addPopupsEventListeners();
 // placeContentForEach();
 
+enableValidation(validationConfig);

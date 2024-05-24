@@ -1,0 +1,12 @@
+/* нижняя подсказка в чем ошибка */
+.popup__error-message-help {
+  color: #FF0000;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.21;
+  opacity: 0;
+}
+
+.popup__error_visible {
+  opacity: 1;
+}
