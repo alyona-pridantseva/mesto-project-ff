@@ -1,0 +1,18 @@
+.profile__image-button-transition {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: none;
+    opacity: 0;
+    background-color: transparent;
+    background-image: url(../../../images/pencil.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.profile__image-button-transition:hover {
+  opacity: 1;
+  background-color: #000000CC;
+}

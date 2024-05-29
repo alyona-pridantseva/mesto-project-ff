@@ -20,6 +20,7 @@
       </header>
       <main class="content">
         <section class="profile page__section">
+          <button class="profile__image-button-transition"></button>
           <div
             class="profile__image"
             style="background-image: url(<%=require('./images/avatar.jpg')%>)"
@@ -55,7 +56,9 @@
               data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
               required
             />
-            <span class="edit-profile__name-input-error popup__error-message-help"></span>
+            <span
+              class="edit-profile__name-input-error popup__error-message-help"
+            ></span>
             <input
               id="edit-profile__description-input"
               type="text"
@@ -68,7 +71,9 @@
               data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
               required
             />
-            <span class="edit-profile__description-input-error popup__error-message-help"></span>
+            <span
+              class="edit-profile__description-input-error popup__error-message-help"
+            ></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -92,7 +97,9 @@
               pattern="^[A-Za-zА-ЯЁа-яё\s\-,]+$"
               data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
-            <span class="place__input-name-error popup__error-message-help"></span>
+            <span
+              class="place__input-name-error popup__error-message-help"
+            ></span>
             <input
               id="place__input-link"
               type="url"
@@ -101,13 +108,39 @@
               placeholder="Ссылка на картинку"
               required
             />
-            <span class="place__input-link-error popup__error-message-help"></span>
+            <span
+              class="place__input-link-error popup__error-message-help"
+            ></span>
+            <button type="submit" class="button popup__button">
+              Создать
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="popup popup_type_avatar">
+        <div class="popup__content popup__content-avatar">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="update-avatar" novalidate>
+            <input
+              id="new-update-avatar-input"
+              type="url"
+              name="input__update-avatar"
+              class="popup__input popup__input_type_update-avatar"
+              placeholder="Вставьте ссылку"
+              minlength="2"
+              data-error-message="Введите ссылку"
+              required
+            />
+            <span class="new-update-avatar-input-error popup__error-message-help"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
           </form>
         </div>
       </div>
+
       <div class="popup popup_type_image">
         <div class="popup__content popup__content_content_image">
           <button type="button" class="popup__close"></button>
@@ -123,7 +156,10 @@
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button type="button" class="card__like-button"></button>
+          <div class="card__like">
+            <button type="button" class="card__like-button"></button>
+            <span class="card__like-counter"></span>
+          </div>
         </div>
       </li>
     </template>
