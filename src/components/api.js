@@ -6,6 +6,14 @@ const config = {
   },
 };
 
+function getResponseData(response) {
+  if (response.ok) {
+    return response.json();
+  }
+  // иначе возвращаем ошибку со статусом
+  return Promise.reject(`Ошибка: ${response.status}`);
+}
+
 //Загрузка информации о пользователе с сервера
 function getUserProfileData() {
   return (
@@ -16,18 +24,8 @@ function getUserProfileData() {
       // если промис fetch выполнился со статусом resolve,
       // тогда вызовется метод then, внутри которого необходимо
       // произвести проверку ответа от сервера (response)
-      .then((response) => {
-        // если пришел ответ об успешном выполнении запроса, обрабатываем ответ
-        if (response.ok) {
-          return response.json();
-        }
-        // иначе возвращаем ошибку со статусом
-        return Promise.reject(`Ошибка: ${response.status}`);
-      })
-      // если промис выполнился с ошибкой, то отлавливаем эту ошибку и возвращаем её
-      .catch((error) => {
-        return Promise.reject(`Ошибка запроса: ${error}`);
-      })
+
+      .then(getResponseData)
   );
 }
 
@@ -36,16 +34,7 @@ function getInitialCards() {
   return fetch(`${config.baseUrl}/cards`, {
     method: "GET",
     headers: config.headers,
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка: ${response.status}`);
-    })
-    .catch((error) => {
-      return Promise.reject(`Ошибка запроса: ${error}`);
-    });
+  }).then(getResponseData);
 }
 
 // Отредактированные данные профиля должны сохраняться на сервере
@@ -57,16 +46,7 @@ function updateProfileData(profileTitle, profileDescription) {
       name: profileTitle,
       about: profileDescription,
     }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка: ${response.status}`);
-    })
-    .catch((error) => {
-      return Promise.reject(`Ошибка запроса: ${error}`);
-    });
+  }).then(getResponseData);
 }
 
 //Добавить на сервер новую карточку
@@ -78,16 +58,7 @@ function addNewCard(cardName, imageLink) {
       name: cardName,
       link: imageLink,
     }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка: ${response.status}`);
-    })
-    .catch((error) => {
-      return Promise.reject(`Ошибка запроса: ${error}`);
-    });
+  }).then(getResponseData);
 }
 
 //Отображение количества лайков карточки
@@ -95,16 +66,7 @@ function likeToggle(cardId, isDelete) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: isDelete ? "DELETE" : "PUT",
     headers: config.headers,
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка: ${response.status}`);
-    })
-    .catch((error) => {
-      return Promise.reject(`Ошибка запроса: ${error}`);
-    });
+  }).then(getResponseData);
 }
 
 // Удалить карточку по её id
@@ -112,16 +74,7 @@ function deleteCardFromServer(cardId) {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка: ${response.status}`);
-    })
-    .catch((error) => {
-      return Promise.reject(`Ошибка запроса: ${error}`);
-    });
+  }).then(getResponseData);
 }
 
 // Смена аватара
@@ -129,19 +82,10 @@ function updateAvatar(link) {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
-    body:JSON.stringify({
+    body: JSON.stringify({
       avatar: link,
     }),
-  })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка: ${response.status}`);
-  })
-  .catch((error) => {
-    return Promise.reject(`Ошибка запроса: ${error}`);
-  });
+  }).then(getResponseData);
 }
 
 export {

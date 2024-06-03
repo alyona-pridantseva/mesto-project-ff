@@ -18,6 +18,7 @@ function closePopup(popupElement) {
 
   // удаление обработчика события при закрытом попап (оверлей)
   popupElement.removeEventListener("click", closePopupOverlay);
+
 }
 
 //Закрытие попапа нажатием на Esc

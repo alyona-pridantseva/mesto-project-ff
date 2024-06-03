@@ -93,9 +93,6 @@ function enableValidation(validationConfig) {
 
   // переберём полученную коллекцию
   formList.forEach((formElement) => {
-    formElement.addEventListener("submit", function (event) {
-      event.preventDefault();
-    });
     // для каждой формы вызовем функцию setEventListeners,
     // передав ей элемент формы
     setEventListeners(
@@ -122,19 +119,26 @@ function hasInvalidInput(inputList) {
   });
 }
 
+function changeButtonState(buttonElement, state, inactiveButtonClass) {
+  buttonElement.disabled = state;
+  if (state) {
+    buttonElement.classList.add(inactiveButtonClass);
+  } else {
+    buttonElement.classList.remove(inactiveButtonClass);
+  }
+}
+
 // Функция принимает массив полей ввода
 // и элемент кнопки, состояние которой нужно менять(отключает и включает кнопку)
 function toggleButtonState(inputList, buttonElement, inactiveButtonClass) {
   // Если есть хотя бы один невалидный инпут
-  if (hasInvalidInput(inputList)) {
-    // сделай кнопку неактивной
-    buttonElement.disabled = true;
-    buttonElement.classList.add(inactiveButtonClass);
-  } else {
-    // иначе сделай кнопку активной
-    buttonElement.disabled = false;
-    buttonElement.classList.remove(inactiveButtonClass);
-  }
+  // сделай кнопку неактивной
+  // иначе сделай кнопку активной
+  changeButtonState(
+    buttonElement,
+    hasInvalidInput(inputList),
+    inactiveButtonClass
+  );
 }
 
 //Функция очищает ошибки валидации формы и делает кнопку неактивной
@@ -152,8 +156,9 @@ function clearValidation(formElement, validationConfig) {
       validationConfig.inputErrorClass,
       validationConfig.errorClass
     );
-    buttonElement.classList.add(validationConfig.inactiveButtonClass);
+
+    toggleButtonState(inputList, buttonElement, validationConfig);
   });
 }
 
-export { enableValidation, clearValidation };
+export { enableValidation, clearValidation, changeButtonState };

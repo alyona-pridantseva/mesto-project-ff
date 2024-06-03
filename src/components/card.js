@@ -7,10 +7,12 @@ function createCard(
   cardDelete,
   cardLike,
   handleImagePopup,
-  myProfile,
+  profileId,
   likeToggle,
   deleteCardFromServer
 ) {
+
+
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true); //клонирую шаблон
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -32,7 +34,7 @@ function createCard(
   const cardLikeButton = cardElement.querySelector(".card__like-button");
 
   // Возвращается элемент, если массив likes содержит такой элемент, у которого _id такой же как и _id моего профиля, иначе undefined
-  const myLike = cardData.likes.find((like) => like._id === myProfile._id);
+  const myLike = cardData.likes.find((like) => like._id === profileId);
 
   // если элемент не undefined, то красим кнопку лайка
   if (myLike) {
@@ -42,24 +44,28 @@ function createCard(
   updateLikesCounter(cardElement, cardData);
 
   cardLikeButton.addEventListener("click", function (event) {
-    const contains = event.target.classList.contains("card__like-button");
-
-    if (contains) {
-      cardLike(event.target);
-    }
-    
     // Возвращается элемент, если массив likes содержит такой элемент, у которого _id такой же как и _id моего профиля, иначе undefined
-    const myLike = cardData.likes.find((like) => like._id === myProfile._id);
+    const myLike = cardData.likes.find((like) => like._id === profileId);
 
-    likeToggle(cardData._id, myLike).then((data) => {
-      cardData = data;
+    likeToggle(cardData._id, myLike)
+      .then((data) => {
+        cardData = data;
 
-      updateLikesCounter(cardElement, cardData);
-    });
+        const contains = event.target.classList.contains("card__like-button");
+
+        if (contains) {
+          cardLike(event.target);
+        }
+
+        updateLikesCounter(cardElement, cardData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
 
   // если _id создателя карточки не равен _id моего профиля, тогда убираем иконку удаления карточки
-  if (cardData.owner._id !== myProfile._id) {
+  if (cardData.owner._id !== profileId) {
     deleteButton.remove();
   }
 
